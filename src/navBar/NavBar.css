@@ -1,0 +1,115 @@
+/* src/Components/NavBar/NavBar.css */
+html {
+    scroll-behavior: smooth;
+    padding: 0rem 1rem;
+
+    
+  }
+
+
+
+  .navbar {
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    
+  }
+
+
+
+  
+.navbar-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+.navbar-item {
+    padding: 14px 20px;
+  }
+  
+.navbar-item a {
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: black;
+  }
+.mobile_menu_icon{
+    display: none;
+}  
+.navbar-item a:hover {
+    color: rgb(237, 122, 122);
+  }
+.icon{
+    position: fixed;
+    right: 1rem;
+    top:1rem
+}
+.mobile_list{
+    list-style: none;
+    width: 100%;
+    height: 100vh;
+    padding-top: 10rem;
+    text-align: center;
+
+}  
+.navbar img {
+  width: 250px;
+  height: 70px;
+}
+
+@media screen and (max-width: 751px) {
+ .menu{
+    display: none;
+ }
+.mobile_menu_icon{
+    display: block;
+} 
+.navbar{
+  padding: 0 .5rem;
+}
+.navbar img {
+  width: 240px;
+  height: 70px;
+}
+.navbar-item a {
+
+  font-size: 2rem;
+
+
+}
+
+.mobile_menu {
+    position: fixed;
+    top: 0;
+    left: -4rem;
+    right: 0;
+    background: rgb(253,219,219);
+    background: linear-gradient(90deg, rgba(253,219,219,1) 31%, rgba(255,192,203,1) 56%, rgba(245,163,177,1) 79%);    border-bottom: 1px solid #ccc;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+   
+  }
+  
+  .mobile_menu.show {
+    transform: translateY(0);
+  }
+  html {
+    scroll-behavior: smooth;
+    padding: unset;
+  } 
+  
+}
+@media screen and (max-width: 400px) {
+
+  .navbar img {
+    width: 180px;
+    height: 70px;
+  }}
