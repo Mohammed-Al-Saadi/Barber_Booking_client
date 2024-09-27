@@ -1,0 +1,23 @@
+/* src/Components/NavBar/NavBar.css */
+*{
+    margin: 0;
+}
+/* Main Dashboard Styles */
+.main_dash_container {
+    display: flex; /* Use flexbox for layout */
+    transition: margin-left 0.3s ease; /* Transition for margin */
+}
+
+.content {
+    flex-grow: 1; /* Take the remaining space */
+    transition: margin-left 0.3s ease; /* Smooth transition for margin */
+    margin-left: 50px; /* Shift content to the right when sidebar is open */
+
+}
+
+/* The sidebar will push the content to the right when open */
+.sidebar.open + .content {
+    margin-left: 50px; /* Shift content to the right when sidebar is open */
+}
+
+

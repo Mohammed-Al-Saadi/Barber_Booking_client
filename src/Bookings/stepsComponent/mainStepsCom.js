@@ -6,6 +6,7 @@ import CategoriesList from "../steps/step1/categories.js";
 import PartThree from "../steps/step4/confirmBooking.js";
 import ServicesList from "../steps/step2/services.js";
 import { GrNext, GrPrevious } from "react-icons/gr";
+import CategoriesAndServices from "../../api/GetServices.js";
 
 const Booking = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -76,7 +77,8 @@ const Booking = () => {
     (currentStep === 2 && !selectedBarber);
 
   return (
-    <div className="booking-container">
+    <section id="service" className="booking-container">
+      <CategoriesAndServices />;
       <nav className="booking-nav">
         {steps.map((step, index) => (
           <div
@@ -100,7 +102,7 @@ const Booking = () => {
         )}
       </div>
       <div className="step-content">{renderStepContent(currentStep)}</div>
-    </div>
+    </section>
   );
 };
 

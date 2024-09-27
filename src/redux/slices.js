@@ -11,6 +11,7 @@ const initialState = {
   selectbarberPrice: null,
   additionalServices: [],
   selectedExtras: [],
+  authBarnerId: null,
 };
 
 const servicesSlice = createSlice({
@@ -48,6 +49,13 @@ const servicesSlice = createSlice({
     selectedExtraServices: (state, action) => {
       state.selectedExtras = action.payload;
     },
+    // New reducers for authentication
+    login: (state, action) => {
+      state.authBarnerId = action.payload; // Set the token
+    },
+    logout: (state) => {
+      state.authBarnerId = null; // Clear the token
+    },
   },
 });
 
@@ -63,6 +71,9 @@ export const {
   selectedBarberPrice,
   selectedAdditionalServices,
   selectedExtraServices,
+  selectedAuthBarberId,
+  login,
+  logout,
 } = servicesSlice.actions;
 
 // Export the reducer

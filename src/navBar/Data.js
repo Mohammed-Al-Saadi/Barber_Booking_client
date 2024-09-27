@@ -3,5 +3,4 @@ export const NavBarData = [
   { name: "Palvelut", path: "#service" },
   { name: "Galleria", path: "#gallery" },
   { name: "Meistä", path: "#about" },
-  { name: "admin", path: "#admin" },
 ];
