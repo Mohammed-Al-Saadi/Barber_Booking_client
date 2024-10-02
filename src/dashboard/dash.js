@@ -2,20 +2,26 @@ import React, { useState } from "react";
 import "./dash.css";
 import Sidebar from "./sidebar/sideBar";
 import Bookings from "./bookings/bookings";
+import BarberInfo from "../nameDate/nameDate";
+import { useSelector } from "react-redux";
 
 function Dash() {
   const [activeComponent, setActiveComponent] = useState(<Bookings />); // Default component
+  const barberName = useSelector(
+    (state) => state.services.selectedBarberNameDash
+  );
 
   return (
     <div className="main_dash_container">
-      <Sidebar onSelect={setActiveComponent} />
+      <div className="side_bar_pos">
+        <Sidebar onSelect={setActiveComponent} />
+      </div>
       <div className="content">
+        <BarberInfo barberName={barberName} />
         {activeComponent} {/* Render the active component here */}
       </div>
     </div>
   );
 }
-
-// Sample component implementations
 
 export default Dash;

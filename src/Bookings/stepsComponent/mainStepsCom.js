@@ -50,6 +50,12 @@ const Booking = () => {
             <PartThree />
           </div>
         );
+      case 4:
+        return (
+          <div>
+            <PartThree />
+          </div>
+        );
       default:
         return null;
     }

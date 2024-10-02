@@ -12,6 +12,8 @@ const initialState = {
   additionalServices: [],
   selectedExtras: [],
   authBarnerId: null,
+  selectedBarberNameDash: null,
+  selectedBarberIdDash: null,
 };
 
 const servicesSlice = createSlice({
@@ -49,6 +51,12 @@ const servicesSlice = createSlice({
     selectedExtraServices: (state, action) => {
       state.selectedExtras = action.payload;
     },
+    selectedBarberDashName: (state, action) => {
+      state.selectedBarberNameDash = action.payload;
+    },
+    selectedBarberDashId: (state, action) => {
+      state.selectedBarberIdDash = action.payload;
+    },
     // New reducers for authentication
     login: (state, action) => {
       state.authBarnerId = action.payload; // Set the token
@@ -74,6 +82,8 @@ export const {
   selectedAuthBarberId,
   login,
   logout,
+  selectedBarberDashName,
+  selectedBarberDashId,
 } = servicesSlice.actions;
 
 // Export the reducer

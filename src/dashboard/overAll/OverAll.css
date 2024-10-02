@@ -1,0 +1,123 @@
+/* General styles for the OverAll component */
+.overall-container {
+  margin: 20px auto; /* Center the component horizontally */
+  padding: 20px;
+  background-color: #ffffff; /* Set background to pure white */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 500px; /* Prevent the component from being too large */
+}
+
+h2 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center; /* Center the heading */
+}
+
+.date-picker-container {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  border: none;
+  justify-content: center; /* Center the date picker */
+}
+.date-navigation .custom-datepicker {
+  border: none; /* Remove the border */
+  width: 6rem;
+  outline: none; /* Remove the outline when focused */
+  padding: 0px; /* Optional: Add padding for better appearance */
+  font-size: 16px; /* Optional: Adjust font size */
+}
+
+.date-navigation .custom-datepicker:focus {
+  outline: none; /* Ensure no outline on focus */
+}
+.db-bg2 {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+.date-navigation {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding-bottom: 1rem;
+}
+.db-bg {
+  background-color: #e0e0e0;
+  border-radius: 50%;
+  padding: 0.2rem;
+}
+.date-picker-container label {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #555;
+  font-size: 16px;
+}
+.custom-datepicker {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.react-datepicker__input-container input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%; /* Make the input take up full width */
+  max-width: 200px;
+}
+
+/* Calendar container styling */
+.custom-calendar {
+  height: 800px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #ffffff;
+  padding: 10px;
+  display: flex;
+  max-width: 30rem;
+}
+.free-slot-text {
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
+.rbc-time-gutter .free-slot-text {
+  display: none;
+}
+
+/* Custom toolbar styling */
+.rbc-toolbar {
+  background-color: #007bff; /* Use Bootstrap's primary blue for the toolbar */
+  color: white;
+  padding: 10px;
+  border-radius: 5px 5px 0 0;
+  display: flex;
+  justify-content: center;
+}
+.rbc-day-slot .rbc-events-container {
+  margin-right: 0;
+  background-color: unset;
+}
+.rbc-time-view {
+  border: none;
+}
+.rbc-toolbar-label {
+  font-size: 18px;
+  font-weight: bold;
+}
+.rbc-event {
+  left: 0 !important; /* Override the inline left style */
+  width: 100% !important; /* Override the inline width style */
+}
+.rbc-row {
+  display: none;
+}

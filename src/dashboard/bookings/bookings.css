@@ -1,0 +1,295 @@
+/* Booking card status styles */
+.main_bookings .booking-card.current {
+  border-left: 4px solid #4caf50; /* Green left border */
+}
+
+.main_bookings .booking-card.upcoming {
+  border-left: 4px solid #ffeb3b; /* Yellow left border */
+}
+
+.main_bookings .booking-card.done {
+  border-left: 4px solid #f44336; /* Red left border */
+}
+
+/* Other styles remain the same */
+.main_bookings .bookings-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px; /* Space between cards */
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3rem;
+  gap: 1rem;
+}
+
+.main_bookings .booking-card {
+  background-color: #ffffff; /* White background for cards */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  padding: 20px; /* Inner padding */
+  width: 300px; /* Fixed width for cards */
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease; /* Smooth transitions for hover effects */
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+}
+
+.main_bookings .booking-card:hover {
+  transform: translateY(-4px); /* Lift the card slightly on hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+}
+
+.main_bookings .booking-card h4 {
+  font-weight: 600; /* Bold weight for headings */
+  margin: 0 0 8px; /* Space below the heading */
+  font-size: 1.3em; /* Larger font size */
+  color: #333; /* Dark color for headings */
+}
+.main_bookings .message {
+  color: #60bb65;
+}
+.main_bookings .booking-card p {
+  margin: 4px 0; /* Uniform margin for paragraphs */
+  color: #777; /* Medium gray color for text */
+  font-size: 0.9em; /* Smaller font size for body text */
+}
+
+.main_bookings .booking-card strong {
+  color: #333; /* Strong color for labels */
+}
+
+.main_bookings .booking-card ul {
+  list-style-type: none; /* Remove default bullet points */
+  padding: 0; /* Remove padding */
+  margin: 10px 0 0; /* Space above the list */
+}
+
+.main_bookings .booking-card li {
+  background-color: #f0f0f09d; /* Light gray background for extra services */
+  border-radius: 4px; /* Slightly rounded corners for list items */
+  padding: 5px 0px; /* Padding for list items */
+  margin: 5px 0; /* Space between list items */
+  font-size: 0.9em; /* Smaller font size for extra services */
+}
+
+.main_bookings .booking-card li:hover {
+  background-color: #e0e0e0; /* Darker gray on hover for extra services */
+}
+
+.main_bookings .action-buttons {
+  margin-top: 10px; /* Space above buttons */
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between; /* Space between buttons */
+}
+
+.main_bookings .action-buttons button {
+  background-color: #bababa59; /* Purple background for buttons */
+  color: rgb(91, 90, 90); /* White text color */
+  border: none; /* Remove default border */
+  border-radius: 4px; /* Rounded corners for buttons */
+  padding: 8px; /* Padding for buttons */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.2s; /* Smooth background color transition */
+}
+
+.main_bookings .action-buttons button:hover {
+  background-color: #605f60; /* Darker purple on hover */
+  color: rgb(213, 213, 213);
+}
+.slots-container {
+  padding: 1rem 0rem;
+}
+.main_bookings .slot-selection {
+  border-top: 1px rgb(174, 174, 174) solid;
+  padding: 1rem 0 0rem;
+}
+
+.main_bookings .slots-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.main_bookings .slot {
+  padding: 10px 10px;
+  background-color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid #ccc;
+  transition: all 0.2s;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  margin: 0 auto;
+}
+
+.main_bookings .slot.selected {
+  background-color: #d9d9d9;
+  color: rgb(33, 33, 33);
+  border-color: #388e3c;
+}
+
+.main_bookings .slot:hover {
+  background-color: #e0e0e0;
+}
+
+.main_bookings button {
+  background-color: #d0d0d0; /* Sidebar background color */
+  color: rgb(52, 51, 51);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  margin: 0.2rem 0rem;
+}
+
+.main_bookings button:hover {
+  background-color: #414141;
+  color: #dbdbdb;
+}
+.price-update {
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+  border-top: 1px rgb(174, 174, 174) solid;
+}
+.total-bookings {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin-bottom: 1rem;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.5rem 0rem;
+}
+.total-bookings label {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.4rem;
+  background-color: #f1f1f1;
+  font-size: 1rem;
+}
+.extended {
+  color: green;
+}
+.main_bookings input[type="number"] {
+  padding: 8px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.main_bookings ul.break-list {
+  list-style: none; /* Remove default bullets */
+  padding: 0;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.main_bookings li.break-item {
+  padding: 8px 12px; /* Padding for each item */
+  border-radius: 4px; /* Slightly rounded corners */
+  margin-bottom: 8px; /* Space between items */
+  font-size: 0.9em; /* Smaller font size */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border: none;
+  background-color: rgb(199, 198, 198);
+}
+
+.main_bookings li.break-item strong {
+  display: block; /* Ensure each label is on its own line */
+  color: #333; /* Darker color for labels */
+}
+
+.main_bookings .modal-content {
+  min-width: 23rem;
+  height: fit-content;
+}
+
+.date-navigation-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0.5rem 0rem;
+  background-color: #f1f1f1;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.custom-date-picker {
+  cursor: pointer;
+  padding: 0.4rem 0.2rem;
+  background-color: #f1f1f1;
+  font-weight: bold;
+  width: 6.7rem;
+  border: none;
+}
+.custom-date-picker:focus {
+  outline: none; /* Remove the default browser outline when focused */
+  border: none; /* Ensure no border is added when clicked */
+}
+/* Style for the previous button inside the date picker */
+.main_bookings .react-datepicker__navigation--previous {
+  border: none; /* Remove border */
+  background-color: #4b4b4bc7; /* Background color */
+  width: 20px; /* Custom width */
+  height: 20px; /* Custom height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px; /* Adjust icon size */
+  transition: background-color 0.3s ease;
+}
+
+/* Style for the next button inside the date picker */
+.main_bookings .react-datepicker__navigation--next {
+  border: none; /* Remove border */
+  background-color: #4b4b4bc5; /* Background color */
+  width: 20px; /* Custom width */
+  height: 20px; /* Custom height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white; /* White icon */
+  font-size: 18px; /* Adjust icon size */
+  transition: background-color 0.3s ease;
+}
+
+.empty {
+  text-align: center;
+  font-weight: bold;
+  padding-top: 4rem;
+}
+.next-prev-date {
+  background-color: #d7d7d7;
+  border-radius: 50%;
+  padding: 0.3rem;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 694px) {
+  .main_bookings .booking-card {
+    width: 100%; /* Fixed width for cards */
+  }
+}

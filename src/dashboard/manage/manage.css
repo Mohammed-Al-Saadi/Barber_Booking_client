@@ -1,0 +1,179 @@
+.main-break-component {
+  padding: 20px 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.main-break-component .header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.main-break-component ul {
+  display: flex;
+  flex-direction: row;
+}
+.main-break-component .columns {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-break-component .add-btn {
+  display: block;
+  background-color: #d0d0d0; /* Sidebar background color */
+  color: rgb(52, 51, 51);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.main-break-component .add-btn:hover {
+  background-color: #909090; /* Sidebar background color */
+  color: rgb(232, 232, 232);
+}
+
+.main-break-component .add-break-form {
+  width: 60%;
+  margin: 1rem auto;
+  flex-direction: column;
+  display: flex;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+}
+.main-break-component .add-break-form p {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+.main-break-component .slot-selection {
+  margin-top: 10px;
+}
+
+.main-break-component .slots-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.main-break-component .slot-item {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.main-break-component .slot-item:hover {
+  background-color: #e0e0e0;
+}
+
+.main-break-component .submit-btn {
+  display: block;
+  background-color: #d0d0d0; /* Sidebar background color */
+  color: rgb(52, 51, 51);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.main-break-component .submit-btn:disabled {
+  background-color: #cccccc;
+}
+
+.main-break-component .submit-btn:hover:not(:disabled) {
+  background-color: #909090; /* Sidebar background color */
+  color: rgb(232, 232, 232);
+}
+
+.main-break-component .break-list {
+  margin-top: 20px;
+}
+.main-break-component .break-list p {
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 3rem;
+}
+
+.main-break-component .break-item {
+  background-color: white;
+  text-align: left;
+  padding: 15px;
+  border-radius: 5px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.main-break-component .break-list-column ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.main-break-component .delete-btn {
+  background-color: #d0d0d0; /* Sidebar background color */
+  color: rgb(52, 51, 51);
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.main-break-component .delete-btn:hover:not(:disabled) {
+  background-color: #b4b4b4;
+}
+
+.main-break-component .error-message {
+  color: red;
+  text-align: center;
+}
+
+.main-break-component .success-message {
+  color: green;
+  text-align: center;
+}
+
+.main-break-component .spinner {
+  border: 3px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 3px solid #3498db;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 520px) {
+  .main-break-component .break-item {
+    width: 100%;
+  }
+
+  .main-break-component .add-btn {
+    width: 100%;
+  }
+
+  .main-break-component .add-break-form {
+    width: 100%;
+  }
+}

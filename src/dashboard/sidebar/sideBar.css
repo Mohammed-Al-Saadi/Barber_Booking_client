@@ -1,69 +1,62 @@
 /* Sidebar Styles */
 .sidebar {
-    width: 180px; /* Fixed width for the sidebar */
-    height: 100vh; /* Full height */
-    background-color: #333; /* Sidebar background color */
-    color: white; /* Text color */
-    transition: margin-left 0.3s ease; /* Transition for margin-left */
-    position: relative; /* Position relative for the margin effect */
-    margin-left: -189px; /* Hidden by default */
-    z-index: 1000; /* Ensure it stays on top */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Box shadow for the sidebar */
+  height: 100vh; /* Full height */
+  background-color: #4e4e4e; /* Sidebar background color */
+  color: white; /* Text color */
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Smooth easing for transform */
+  position: fixed; /* Fixed to the left */
+  top: 0; /* Start from top */
+  left: 0; /* Positioned at the left of the screen */
+  transform: translateX(-225px); /* Initially hidden off-screen */
+  z-index: 1000; /* Ensure it stays on top */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Box shadow for the sidebar */
 }
 
 .sidebar.open {
-    margin-left: -2rem; /* Show sidebar by setting margin-left to 0 */
+  transform: translateX(-30px); /* Slide in when open */
+  padding: 0;
 }
 
 .nav-list {
-    list-style: none; /* Remove bullet points */
-    padding: 0; /* Remove default padding */
-    display: flex;
-    flex-direction: column;
-
-    margin-top: 3rem; /* Space from the top */
+  list-style: none; /* Remove bullet points */
+  padding: 0; /* Remove default padding */
+  display: flex;
+  flex-direction: column;
+  margin-top: 3rem; /* Space from the top */
 }
 
 .nav-list li {
-    width: 100%; /* Ensure full width for the list items */
- 
-
+  width: 100%; /* Ensure full width for the list items */
 }
-
+.sidebar img {
+  width: 70px;
+  top: -3.5rem;
+  margin-left: 3rem;
+  position: relative;
+}
 .nav-list li button {
-    color: white; /* Button text color */
-    background: none; /* No background */
-    border: none; /* No border */
-    cursor: pointer; /* Pointer cursor */
-    width: 100%; /* Full width for buttons */
-    padding: 15px 50px; /* Space around button text */
-    transition: background-color 0.3s, box-shadow 0.3s; /* Transition for hover effects */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  color: white; /* Button text color */
+  background: none; /* No background */
+  border: none; /* No border */
+  cursor: pointer; /* Pointer cursor */
+  width: fit-content; /* Full width for buttons */
+  padding: 15px 50px; /* Space around button text */
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s; /* Transition for hover effects */
 }
-
-.nav-list li button:hover {
-    background-color: #444; /* Change background on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Box shadow on hover */
-
+.sidebae-icon {
+  display: flex;
+  justify-content: right;
+  padding: 0.5rem 0.2rem;
+  cursor: pointer;
+  position: relative;
+  top: 1rem;
 }
-
-.toggle-btn {
-    position: absolute; /* Position outside the sidebar */
-    top: 0; /* Distance from the top */
-    right: -50px; /* Position to the right of the sidebar */
-    background: #444; /* Button background color */
-    color: white; /* Button text color */
-    border: none; /* No border */
-    padding: 10px; /* Padding inside the button */
-    cursor: pointer; /* Pointer cursor */
-    width: fit-content; /* Fit content width */
-    transition: background-color 0.3s, box-shadow 0.3s; /* Transition for hover effects */
-    border-radius: 4px; /* Rounded corners */
-}
-
-.toggle-btn:hover {
-    background-color: #555; /* Change background on hover */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Box shadow on hover */
+.icon-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  cursor: pointer;
+  padding: 0.5rem 0.2rem;
 }

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { selectedBarberDashName, selectedBarberDashId } from "../redux/slices";
 
 const ProtectedRoute = ({ element }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const token = useSelector((state) => state.services.authBarnerId); // Access the token from Redux
   useEffect(() => {
@@ -26,9 +29,7 @@ const ProtectedRoute = ({ element }) => {
         if (!response.ok) {
           throw new Error("Session expired");
         }
-
         const data = await response.json();
-
         // Convert expiration date to a readable format
         const expirationDate = new Date(data.expiration_date);
         const now = new Date();
@@ -37,6 +38,8 @@ const ProtectedRoute = ({ element }) => {
         //console.log("Current Time (Readable):", now.toLocaleString());
         if (expirationDate > now) {
           setIsAuthenticated(true);
+          dispatch(selectedBarberDashName(data.barber_name));
+          dispatch(selectedBarberDashId(data.barber_id));
         } else {
           console.log("Session expired, redirecting to login");
           navigate("/login");
@@ -48,7 +51,7 @@ const ProtectedRoute = ({ element }) => {
     };
 
     checkSession();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   return isAuthenticated ? element : null;
 };

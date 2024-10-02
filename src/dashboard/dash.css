@@ -1,23 +1,31 @@
-/* src/Components/NavBar/NavBar.css */
-*{
-    margin: 0;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
 /* Main Dashboard Styles */
 .main_dash_container {
-    display: flex; /* Use flexbox for layout */
-    transition: margin-left 0.3s ease; /* Transition for margin */
+  display: flex; /* Use flexbox for layout */
+  width: 100%;
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Prevent scrolling on the main container */
+}
+
+.side_bar_pos {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%; /* Full height for the sidebar */
+  color: #fff;
+  z-index: 1000; /* Ensure it stays on top */
+  overflow: hidden; /* Prevent scrolling in the sidebar */
 }
 
 .content {
-    flex-grow: 1; /* Take the remaining space */
-    transition: margin-left 0.3s ease; /* Smooth transition for margin */
-    margin-left: 50px; /* Shift content to the right when sidebar is open */
-
+  height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* Allow vertical scrolling for content */
+  padding: 20px; /* Optional padding for the content area */
+  margin-left: 2.5rem;
+  width: 100%;
 }
-
-/* The sidebar will push the content to the right when open */
-.sidebar.open + .content {
-    margin-left: 50px; /* Shift content to the right when sidebar is open */
-}
-
-

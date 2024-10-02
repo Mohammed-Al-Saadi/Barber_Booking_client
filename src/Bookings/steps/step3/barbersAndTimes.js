@@ -16,9 +16,10 @@ import BounceLoader from "react-spinners/BounceLoader";
 import { PiClockCountdownDuotone } from "react-icons/pi";
 
 import img from "../../../assets/1.jpg";
+
 // Define barber images based on barber_id
 const barberImages = {
-  1: img, // Replace with actual URLs or paths
+  1: img,
   2: img,
   3: img,
   4: img,
@@ -42,13 +43,14 @@ const Barber = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedBarber, setSelectedBarber] = useState(selectedBarberId);
-  const [selectedDate, setSelectedDate] = useState(new Date()); // Set initial date to today
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [availableSlots, setAvailableSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(
     selectedDateTime ? selectedDateTime : null
   );
-  const [dayOffset, setDayOffset] = useState(0); // Offset for next/prev buttons
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false); // State to control the calendar visibility
+  const [dayOffset, setDayOffset] = useState(0);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
   // Retrieve values from Redux
   const selectedExtras = useSelector((state) => state.services.selectedExtras);
 
@@ -83,7 +85,7 @@ const Barber = () => {
           return response.json();
         })
         .then((data) => {
-          console.log("Barber data:", data);
+          console.log("Barber data:", data); // Debug line
           setBarberData(data.barbers);
           setLoading(false);
         })
@@ -93,7 +95,7 @@ const Barber = () => {
           setLoading(false);
         });
     }
-  }, [combinedServices]); // This effect will only run when combinedServices changes
+  }, [combinedServices]);
 
   useEffect(() => {
     if (selectedBarberId) {
@@ -104,8 +106,9 @@ const Barber = () => {
   // When selectedDate or barberData changes, fetch available slots
   useEffect(() => {
     if (selectedDate && barberData && selectedBarber) {
-      const dateString = selectedDate.toISOString().split("T")[0];
+      const dateString = selectedDate.toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
       const slots = barberData.time_slots[selectedBarber]?.[dateString] || [];
+
       setAvailableSlots(slots);
     }
   }, [selectedDate, barberData, selectedBarber]);
@@ -125,8 +128,8 @@ const Barber = () => {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    setDayOffset(0); // Reset dayOffset when a new date is selected
-    setIsCalendarOpen(false); // Close calendar on date select
+    setDayOffset(0);
+    setIsCalendarOpen(false);
   };
 
   // Format the date to show "Thursday, 21/09/2024"
@@ -142,14 +145,14 @@ const Barber = () => {
 
   const getCurrentDayDate = (offset = 0) => {
     const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + offset);
+    currentDate.setDate(currentDate.getDate() + offset); // Adjust for the offset
     return currentDate;
   };
 
   const moveDay = (offset) => {
     const newDate = getCurrentDayDate(offset);
-    setSelectedDate(newDate);
-    setDayOffset(offset);
+    setSelectedDate(newDate); // Set the new selected date
+    setDayOffset(offset); // Update the offset
   };
 
   // Detect clicks outside the calendar to close it
@@ -204,12 +207,8 @@ const Barber = () => {
                   selectedBarber === barber.barber_id ? "selected-barber" : ""
                 }`}
               >
-                {/* Display Barber Image */}
                 {barber.price} €
-                <img
-                  src={barberImages[barber.barber_id]} // Use the image corresponding to barber_id
-                  alt={barber.name}
-                />
+                <img src={barberImages[barber.barber_id]} alt={barber.name} />
                 {barber.name}
                 <div className="line"></div>
               </div>
@@ -218,20 +217,18 @@ const Barber = () => {
 
           {selectedBarber && (
             <div className="calendar-container">
-              {/* Next/Previous Day Buttons */}
               <div className="day-navigation">
                 <GrPrevious
                   color={dayOffset <= 0 ? "gray" : "white"}
                   className={`icon-border ${dayOffset <= 0 ? "disabled" : ""}`}
                   size={22}
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent opening calendar on prev click
+                    e.stopPropagation();
                     if (dayOffset > 0) {
                       moveDay(dayOffset - 1);
                     }
                   }}
                 />
-                {/* Make the date clickable to open the calendar */}
                 <div
                   onClick={() => setIsCalendarOpen(true)}
                   style={{ cursor: "pointer" }}
@@ -244,24 +241,22 @@ const Barber = () => {
                   size={22}
                   color="white"
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent opening calendar on next click
+                    e.stopPropagation();
                     moveDay(dayOffset + 1);
                   }}
                 />
               </div>
 
-              {/* Hidden DatePicker controlled by the navigation click */}
               <div className="calender" ref={calendarContainerRef}>
                 <DatePicker
                   ref={datepickerRef}
                   selected={selectedDate}
                   onChange={handleDateChange}
                   open={isCalendarOpen}
-                  onClickOutside={() => setIsCalendarOpen(false)}
                   dateFormat="dd/MM/yyyy"
-                  minDate={new Date()} // Restrict past dates
+                  minDate={new Date()}
                   placeholderText="Select a date"
-                  customInput={<div />} // Hide the default input
+                  customInput={<div />}
                 />
                 <PiClockCountdownDuotone color="gray" size={30} />
               </div>
@@ -271,9 +266,9 @@ const Barber = () => {
                   <ul className="time-slot-list">
                     {availableSlots.length > 0 ? (
                       availableSlots.map((slot, index) => {
-                        const slotIdentifier = `${
-                          selectedDate.toISOString().split("T")[0]
-                        } ${slot.Time}`;
+                        const slotIdentifier = `${selectedDate.toLocaleDateString(
+                          "en-CA"
+                        )} ${slot.Time}`;
                         return (
                           <li
                             key={index}
@@ -284,7 +279,7 @@ const Barber = () => {
                             }`}
                             onClick={() =>
                               handleSlotSelection(
-                                selectedDate.toISOString().split("T")[0],
+                                selectedDate.toLocaleDateString("en-CA"),
                                 slot.Time
                               )
                             }

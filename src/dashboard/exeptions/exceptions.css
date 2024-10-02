@@ -1,0 +1,152 @@
+.barber-exceptions-container {
+  margin: 40px auto;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: "Arial", sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+  width: 100%;
+}
+
+/* Heading styles */
+.barber-exceptions-container h2,
+.barber-exceptions-container h3 {
+  text-align: center;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Toggle button for the form */
+.barber-exceptions-container .toggle-form-button {
+  background-color: #bababa59; /* Purple background for buttons */
+  color: rgb(91, 90, 90); /* White text color */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 auto;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.barber-exceptions-container .toggle-form-button:hover {
+  background-color: #605f60; /* Darker purple on hover */
+  color: rgb(213, 213, 213);
+}
+
+/* Form styling */
+.barber-exceptions-container .exception-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.barber-exceptions-container .exception-form label {
+  font-size: 14px;
+  color: #34495e;
+  display: block;
+}
+
+.barber-exceptions-container .exception-form input[type="date"],
+.barber-exceptions-container .exception-form input[type="time"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #d1d1d1;
+  font-size: 14px;
+  min-width: 15rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.barber-exceptions-container .exception-form input[type="checkbox"] {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.barber-exceptions-container .exception-form button {
+  padding: 10px 15px;
+  background-color: #bababa59; /* Purple background for buttons */
+  color: rgb(91, 90, 90); /* White text color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.barber-exceptions-container .exception-form button:hover {
+  background-color: #605f60; /* Darker purple on hover */
+  color: rgb(213, 213, 213);
+}
+
+.barber-exceptions-container .dayoff {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 14px;
+  color: #34495e;
+  font-weight: bold;
+}
+.barber-exceptions-container .dayoff input {
+  position: relative;
+  top: 0.25rem;
+}
+
+/* Exception list styling */
+.barber-exceptions-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.barber-exceptions-container li {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  font-size: 14px;
+}
+
+.barber-exceptions-container li strong {
+  color: #2c3e50;
+}
+
+.barber-exceptions-container li span {
+  color: #7f8c8d;
+}
+
+/* Loading spinner */
+.loading-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.loading-container p {
+  font-size: 16px;
+  color: #7f8c8d;
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .barber-exceptions-container {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .barber-exceptions-container .toggle-form-button,
+  .barber-exceptions-container .exception-form button {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .barber-exceptions-container .exception-form input[type="date"],
+  .barber-exceptions-container .exception-form input[type="time"] {
+    font-size: 14px;
+  }
+}
