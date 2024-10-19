@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "./dash.css";
-import Sidebar from "./sidebar/sideBar";
-import Bookings from "./bookings/bookings";
+import Sidebar from "../sidebar/sideBar";
+import Bookings from "../bookings/bookings";
 import BarberInfo from "../nameDate/nameDate";
 import { useSelector } from "react-redux";
 
 function Dash() {
-  const [activeComponent, setActiveComponent] = useState(<Bookings />); // Default component
+  const [activeComponent, setActiveComponent] = useState(<Bookings />);
   const barberName = useSelector(
     (state) => state.services.selectedBarberNameDash
   );

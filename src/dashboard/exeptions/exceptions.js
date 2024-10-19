@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./exceptions.css";
 import { useSelector } from "react-redux";
-import BeatLoader from "react-spinners/BeatLoader"; // Loader
-
+import BeatLoader from "react-spinners/BeatLoader";
+import { getData, postData } from "../../api/apiService";
+import { resetForm } from "./exceptionsUtils";
 const BarberExceptions = () => {
-  const [exceptions, setExceptions] = useState([]); // State to store fetched exceptions
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [exceptions, setExceptions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const barberId = useSelector((state) => state.services.selectedBarberIdDash);
-
-  // State for the form fields to add new exceptions
   const [exceptionDate, setExceptionDate] = useState("");
   const [customStartTime, setCustomStartTime] = useState("");
   const [customEndTime, setCustomEndTime] = useState("");
@@ -23,14 +22,10 @@ const BarberExceptions = () => {
     const fetchExceptions = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
-          `http://127.0.0.1:8080/get_barber_exceptions?barber_id=${barberId}`
+        const data = await getData(
+          `get_barber_exceptions?barber_id=${barberId}`
         );
-        if (!response.ok) {
-          throw new Error("Failed to fetch exceptions.");
-        }
-        const data = await response.json();
-        setExceptions(data); // Set the fetched exceptions
+        setExceptions(data);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -44,42 +39,27 @@ const BarberExceptions = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8080/insert_barber_exception",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            barber_id: barberId,
-            exception_date: exceptionDate,
-            custom_start_time: isOff ? null : customStartTime,
-            custom_end_time: isOff ? null : customEndTime,
-            is_off: isOff,
-          }),
-        }
-      );
+      const newException = await postData("insert_barber_exception", {
+        barber_id: barberId,
+        exception_date: exceptionDate,
+        custom_start_time: isOff ? null : customStartTime,
+        custom_end_time: isOff ? null : customEndTime,
+        is_off: isOff,
+      });
 
-      if (!response.ok) {
-        throw new Error("Failed to insert exception.");
-      }
+      setExceptions([...exceptions, newException]); 
 
-      const newException = await response.json();
-      setExceptions([...exceptions, newException]); // Add the new exception to the list
-      resetForm();
+      // Reset the form after submission using the resetForm utility
+      resetForm({
+        setExceptionDate,
+        setCustomStartTime,
+        setCustomEndTime,
+        setIsOff,
+        setIsFormVisible,
+      });
     } catch (err) {
       setError(err.message);
     }
-  };
-
-  // Helper to reset the form
-  const resetForm = () => {
-    setExceptionDate("");
-    setCustomStartTime("");
-    setCustomEndTime("");
-    setIsOff(false);
-    setIsFormVisible(false); // Collapse the form after submission
   };
 
   // Render loading, error, or the fetched data

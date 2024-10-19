@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "./GetServices.css";
-import { selectedAdditionalServices, setServices } from "../redux/slices"; // Ensure this path is correct
+import { selectedAdditionalServices, setServices } from "../redux/slices"; 
 import { useDispatch } from "react-redux";
+import { getData } from "../apiService"; 
 
 const CategoriesAndServices = () => {
   const [error, setError] = useState(null);
@@ -9,19 +9,10 @@ const CategoriesAndServices = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/get_categories_and_services")
-      .then((response) => {
-        if (!response.ok) {
-          console.error("Server error:", response);
-          throw new Error(`Failed to fetch: ${response.statusText}`);
-        }
-        return response.json();
-      })
+    getData("/get_categories_and_services") 
       .then((data) => {
         if (data) {
-          console.log("Dispatching 333:", data);
-          dispatch(setServices(data)); // Dispatch action to set categories
-
+          dispatch(setServices(data)); 
           // Check for "Lisäpalvelut" and dispatch its services
           const additionalServices = data["Lisäpalvelut"];
           if (additionalServices) {
@@ -47,8 +38,7 @@ const CategoriesAndServices = () => {
     return <div className="error">Error: {error}</div>;
   }
 
-  // Indicate that the fetch and dispatch were successful
-  return null; // Return null or a suitable component here
+  return null;
 };
 
 export default CategoriesAndServices;

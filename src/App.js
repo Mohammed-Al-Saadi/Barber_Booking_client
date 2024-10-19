@@ -1,11 +1,10 @@
 import Booking from "./Bookings/stepsComponent/mainStepsCom.js";
-import Dash from "./dashboard/dash.js";
+import Dash from "./dashboard/mainDash/dash.js";
 import Footer from "./footer/Footer.js";
-import Login from "./login/Login.js";
 import NavBar from "./navBar/NavBar.js";
-
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.js";
+import ProtectedRoute from "./dashboard/ProtectedRoute/ProtectedRoute.js";
+import Login from "./dashboard/login/Login.js";
 
 function App() {
   return (

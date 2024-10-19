@@ -1,34 +1,30 @@
 import React, { useEffect, useState } from "react";
-import "./manage.css";
+import "./manageBreaks.css";
 import { useSelector } from "react-redux";
-import BeatLoader from "react-spinners/BeatLoader"; // Loader
-
+import BeatLoader from "react-spinners/BeatLoader";
+import { getData, postData, deleteData } from "../../api/apiService";
 function Manage() {
-  const [breaks, setBreaks] = useState([]); // Initialize breaks as an empty array
-  const [availableSlots, setAvailableSlots] = useState([]); // Initialize available slots as an empty array
+  const [breaks, setBreaks] = useState([]);
+  const [availableSlots, setAvailableSlots] = useState([]);
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null); // Success message state
-  const [showForm, setShowForm] = useState(false); // For showing/hiding the form
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [showForm, setShowForm] = useState(false);
   const [newBreakDate, setNewBreakDate] = useState("");
-  const [selectedSlots, setSelectedSlots] = useState([]); // For holding the selected break slots (multiple)
-  const [loading, setLoading] = useState(false); // Loading state for adding break
-  const [deleteLoading, setDeleteLoading] = useState({}); // Loading state for deleting each break
-  const [fetchLoading, setFetchLoading] = useState(true); // Loading state for fetching breaks
-  const [slotLoading, setSlotLoading] = useState(false); // Loading state for fetching available slots
+  const [selectedSlots, setSelectedSlots] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState({});
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [slotLoading, setSlotLoading] = useState(false);
   const barberId = useSelector((state) => state.services.selectedBarberIdDash);
 
   // Fetch breaks when component mounts
   useEffect(() => {
     const fetchBreaks = async () => {
-      setFetchLoading(true); // Set loading to true before fetching data
+      setFetchLoading(true);
       try {
-        const response = await fetch(
-          `http://127.0.0.1:8080/get_barber_breaks?barber_id=${barberId}&type=Break`
+        const data = await getData(
+          `get_barber_breaks?barber_id=${barberId}&type=Break`
         );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
         if (data.success) {
           setBreaks(Array.isArray(data.breaks) ? data.breaks : []);
         } else {
@@ -37,7 +33,7 @@ function Manage() {
       } catch (err) {
         setError(err.message);
       } finally {
-        setFetchLoading(false); // Set loading to false after fetching data
+        setFetchLoading(false);
       }
     };
 
@@ -48,15 +44,11 @@ function Manage() {
   useEffect(() => {
     const fetchAvailableSlots = async () => {
       if (newBreakDate) {
-        setSlotLoading(true); // Set slot loading state
+        setSlotLoading(true);
         try {
-          const response = await fetch(
-            `http://127.0.0.1:8080/available-slots?barber_id=${barberId}&date=${newBreakDate}`
+          const data = await getData(
+            `available-slots?barber_id=${barberId}&date=${newBreakDate}`
           );
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
           if (data.available_slots) {
             setAvailableSlots(data.available_slots);
           } else {
@@ -66,13 +58,13 @@ function Manage() {
         } catch (err) {
           setError(err.message);
         } finally {
-          setSlotLoading(false); // Set slot loading to false after fetching slots
+          setSlotLoading(false);
         }
       }
     };
 
     fetchAvailableSlots();
-  }, [newBreakDate]);
+  }, [newBreakDate, barberId]);
 
   const handleAddBreak = async () => {
     if (!newBreakDate || selectedSlots.length === 0) {
@@ -85,71 +77,48 @@ function Manage() {
     setSuccessMessage(null);
 
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8080/add_barber_break_slot",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            barber_id: barberId,
-            break_date: newBreakDate,
-            break_time: selectedSlots, // Send the selected available slots as an array
-            timeType: "Break",
-            booking_id: 0,
-          }),
-        }
-      );
+      const newBreak = await postData("add_barber_break_slot", {
+        barber_id: barberId,
+        break_date: newBreakDate,
+        break_time: selectedSlots,
+        timeType: "Break",
+        booking_id: 0,
+      });
 
-      if (response.ok) {
-        const newBreak = await response.json();
-        if (newBreak.breaks) {
-          setBreaks([...breaks, ...newBreak.breaks]); // Assuming breaks is an array
-        } else {
-          setBreaks([...breaks, newBreak]); // Handle a single break if the response doesn't contain an array
-        }
-
-        setNewBreakDate(""); // Reset input fields
-        setSelectedSlots([]); // Reset selected slots
-        setSuccessMessage("Breaks added successfully!"); // Set success message
-        setShowForm(false); // Collapse the form after adding a break
-        setTimeout(() => setSuccessMessage(null), 2000); // Hide success message after 2 seconds
+      if (newBreak.breaks) {
+        setBreaks([...breaks, ...newBreak.breaks]);
       } else {
-        throw new Error("Failed to add the breaks.");
+        setBreaks([...breaks, newBreak]);
       }
+
+      setNewBreakDate("");
+      setSelectedSlots([]);
+      setSuccessMessage("Breaks added successfully!");
+      setShowForm(false);
+      setTimeout(() => setSuccessMessage(null), 2000);
     } catch (err) {
       setError(err.message);
-      setTimeout(() => setError(null), 2000); // Hide error message after 2 seconds
+      setTimeout(() => setError(null), 2000);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeleteBreak = async (breakId) => {
-    setDeleteLoading((prev) => ({ ...prev, [breakId]: true })); // Set loading for specific break
+    setDeleteLoading((prev) => ({ ...prev, [breakId]: true }));
     setError(null);
     setSuccessMessage(null);
 
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8080/delete_barber_break?break_id=${breakId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (response.ok) {
-        setBreaks(breaks.filter((b) => b.break_id !== breakId));
-        setSuccessMessage("Break deleted successfully!");
-        setTimeout(() => setSuccessMessage(null), 2000); // Hide success message after 2 seconds
-      } else {
-        throw new Error("Failed to delete the break.");
-      }
+      await deleteData(`delete_barber_break?break_id=${breakId}`);
+      setBreaks(breaks.filter((b) => b.break_id !== breakId));
+      setSuccessMessage("Break deleted successfully!");
+      setTimeout(() => setSuccessMessage(null), 2000);
     } catch (err) {
       setError(err.message);
-      setTimeout(() => setError(null), 2000); // Hide error message after 2 seconds
+      setTimeout(() => setError(null), 2000);
     } finally {
-      setDeleteLoading((prev) => ({ ...prev, [breakId]: false })); // Reset loading for specific break
+      setDeleteLoading((prev) => ({ ...prev, [breakId]: false }));
     }
   };
 

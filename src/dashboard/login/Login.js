@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import "./Login.css";
-import { login } from "../redux/slices";
+import { login } from "../../redux/slices";
 import { useDispatch } from "react-redux";
 
 const Login = () => {

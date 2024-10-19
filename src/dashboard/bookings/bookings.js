@@ -1,44 +1,42 @@
 import React, { useEffect, useState } from "react";
-import "./bookings.css"; // Import your CSS file for styling
-import BeatLoader from "react-spinners/BeatLoader"; // Loader
+import "./bookings.css";
+import BeatLoader from "react-spinners/BeatLoader";
 import { useSelector } from "react-redux";
-import Modal from "../../ModelView";
-import DatePicker from "react-datepicker"; // Import Date Picker
-import "react-datepicker/dist/react-datepicker.css"; // Date Picker CSS
+import Modal from "../../ModelView/ModelView";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { SlCalender } from "react-icons/sl";
-import { GrNext } from "react-icons/gr";
-import { GrPrevious } from "react-icons/gr";
-import OverAll from "../overAll/overAll";
+import { GrNext, GrPrevious } from "react-icons/gr";
+import { getData, postData } from "../../api/apiService";
+import {
+  calculateBookingEndTime,
+  groupBookingsByDate,
+  sortBookingsByStatus,
+  getBookingStatus,
+  filterSlotsAfterBooking,
+} from "./bookingUtils";
 
 function Bookings() {
   const [bookings, setBookings] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date()); // Track the selected date
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [availableSlots, setAvailableSlots] = useState([]);
-  const [selectedSlots, setSelectedSlots] = useState([]); // For multiple slot selection
+  const [selectedSlots, setSelectedSlots] = useState([]);
   const [newPrice, setNewPrice] = useState("");
-  const [modalType, setModalType] = useState(""); // New state to differentiate between price and time modals
-  const [loadingSlots, setLoadingSlots] = useState(false); // Track loading state for slots
-  const [breaks, setBreaks] = useState([]); // Initialize breaks as an empty array
-  const [successMessage, setSuccessMessage] = useState(""); // State for success message
+  const [modalType, setModalType] = useState("");
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [breaks, setBreaks] = useState([]);
+  const [successMessage, setSuccessMessage] = useState("");
   const barberId = useSelector((state) => state.services.selectedBarberIdDash);
 
   // Fetch bookings data
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch(
-          `http://127.0.0.1:8080/get_todays_bookings?barber_id=${barberId}`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-
+        const data = await getData(`get_todays_bookings?barber_id=${barberId}`);
         if (Array.isArray(data.bookings)) {
-          // Group bookings by date
           const groupedBookings = groupBookingsByDate(data.bookings);
           setBookings(groupedBookings);
         } else {
@@ -54,67 +52,12 @@ function Bookings() {
     fetchBookings();
   }, [barberId]);
 
-  // Group bookings by date and sort them by status
-  const groupBookingsByDate = (bookings) => {
-    return bookings.reduce((acc, booking) => {
-      const date = new Date(booking.appointment_time).toLocaleDateString(
-        "en-GB"
-      );
-      if (!acc[date]) {
-        acc[date] = [];
-      }
-      acc[date].push(booking);
-      return acc;
-    }, {});
-  };
-
-  // Sort bookings by status (current, upcoming, done)
-  const sortBookingsByStatus = (bookingsForDate) => {
-    const now = new Date();
-    const sortedBookings = [...bookingsForDate].sort((a, b) => {
-      const aStatus = getBookingStatus(
-        a.appointment_time,
-        a.total_estimated_time
-      );
-      const bStatus = getBookingStatus(
-        b.appointment_time,
-        b.total_estimated_time
-      );
-
-      if (aStatus === "current") return -1;
-      if (bStatus === "current") return 1;
-      if (aStatus === "upcoming" && bStatus === "done") return -1;
-      if (aStatus === "done" && bStatus === "upcoming") return 1;
-      return 0;
-    });
-
-    return sortedBookings;
-  };
-
-  const getBookingStatus = (appointmentTime, totalEstimatedTime) => {
-    const now = new Date();
-    const appointmentDate = new Date(appointmentTime);
-    const endTime = new Date(
-      appointmentDate.getTime() + totalEstimatedTime * 60000
-    );
-
-    if (now < appointmentDate) {
-      return "upcoming";
-    } else if (now >= appointmentDate && now < endTime) {
-      return "current";
-    } else {
-      return "done";
-    }
-  };
-
   const handlePrevDate = () => {
     const newDate = new Date(selectedDate);
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set today's time to midnight for accurate comparison
+    today.setHours(0, 0, 0, 0);
 
     newDate.setDate(newDate.getDate() - 1);
-
-    // Prevent navigating to a date earlier than today
     if (newDate >= today) {
       setSelectedDate(newDate);
     }
@@ -128,13 +71,9 @@ function Bookings() {
 
   const fetchBreaksForBooking = async (bookingId) => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8080/get_barber_breaks?barber_id=${barberId}&type=Extend`
+      const data = await getData(
+        `get_barber_breaks?barber_id=${barberId}&type=Extend`
       );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
 
       if (data.success && Array.isArray(data.breaks)) {
         const bookingBreaks = data.breaks.filter(
@@ -152,13 +91,9 @@ function Bookings() {
   const fetchAvailableSlots = async (date, bookingEndTime) => {
     setLoadingSlots(true);
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8080/available-slots?barber_id=${barberId}&date=${date}`
+      const data = await getData(
+        `available-slots?barber_id=${barberId}&date=${date}`
       );
-      if (!response.ok) {
-        throw new Error("Failed to fetch available slots");
-      }
-      const data = await response.json();
 
       if (data.available_slots && Array.isArray(data.available_slots)) {
         const filteredSlots = filterSlotsAfterBooking(
@@ -174,38 +109,6 @@ function Bookings() {
     } finally {
       setLoadingSlots(false);
     }
-  };
-
-  const filterSlotsAfterBooking = (slots, bookingEndTime) => {
-    const filteredSlots = [];
-    let lastSlotTime = bookingEndTime;
-
-    for (let i = 0; i < slots.length; i++) {
-      const slotTime = convertSlotToDateTime(slots[i]);
-
-      if (slotTime >= bookingEndTime) {
-        const timeDifference = (slotTime - lastSlotTime) / 60000;
-        if (timeDifference > 15 && filteredSlots.length > 0) {
-          break;
-        }
-        filteredSlots.push(slots[i]);
-        lastSlotTime = slotTime;
-      }
-    }
-
-    return filteredSlots;
-  };
-
-  const convertSlotToDateTime = (slot) => {
-    const [hours, minutes] = slot.split(":").map(Number);
-    const now = new Date();
-    return new Date(now.setHours(hours, minutes, 0, 0));
-  };
-
-  const calculateBookingEndTime = (booking) => {
-    const appointmentTime = new Date(booking.appointment_time);
-    const totalEstimatedTime = booking.total_estimated_time * 60000;
-    return new Date(appointmentTime.getTime() + totalEstimatedTime);
   };
 
   const handleExtendClick = (booking) => {
@@ -232,33 +135,19 @@ function Bookings() {
 
   const handleExtendBookingTime = async () => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8080/add_barber_break_slot`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            booking_id: selectedBooking.booking_id,
-            barber_id: barberId,
-            break_time: selectedSlots,
-            break_date: selectedBooking.appointment_time.split(" ")[0],
-            timeType: "Extend",
-          }),
-        }
-      );
+      const data = await postData(`add_barber_break_slot`, {
+        booking_id: selectedBooking.booking_id,
+        barber_id: barberId,
+        break_time: selectedSlots,
+        break_date: selectedBooking.appointment_time.split(" ")[0],
+        timeType: "Extend",
+      });
 
-      if (!response.ok) {
-        throw new Error("Failed to extend booking time");
-      }
-
-      const data = await response.json();
       setSuccessMessage("Booking time extended successfully!");
       setTimeout(() => {
         setSuccessMessage("");
         setSelectedBooking(null);
-      }, 2000); // Close modal after 2 seconds
+      }, 2000);
     } catch (err) {
       setError(err.message);
     }
@@ -266,40 +155,27 @@ function Bookings() {
 
   const handleUpdatePrice = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8080/update_price`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          booking_id: selectedBooking.booking_id,
-          new_price: newPrice,
-        }),
+      const data = await postData(`update_price`, {
+        booking_id: selectedBooking.booking_id,
+        new_price: newPrice,
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update price");
-      }
-
-      const data = await response.json();
       setSuccessMessage("Price updated successfully!");
       setTimeout(() => {
         setSuccessMessage("");
-        setSelectedBooking(null); // Close modal after success
+        setSelectedBooking(null);
       }, 2000);
     } catch (err) {
       setError(err.message);
     }
   };
 
-  // Get the date keys (sorted) from the grouped bookings
   const dateKeys = Object.keys(bookings).sort(
     (a, b) => new Date(a) - new Date(b)
   );
 
   const formattedSelectedDate = selectedDate.toLocaleDateString("en-GB");
 
-  // Display loading state
   if (loading) {
     return (
       <div className="loading-container">
@@ -309,23 +185,19 @@ function Bookings() {
     );
   }
 
-  // Display error state
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  // No bookings available message
   if (dateKeys.length === 0) {
     return <div>No bookings available from today onwards.</div>;
   }
 
-  // Get bookings for selected date
   const bookingsForSelectedDate = bookings[formattedSelectedDate] || [];
   const sortedBookingsForSelectedDate = sortBookingsByStatus(
     bookingsForSelectedDate
   );
 
-  // Count total done, current, and upcoming bookings
   const totalDone = sortedBookingsForSelectedDate.filter(
     (booking) =>
       getBookingStatus(
@@ -384,10 +256,10 @@ function Bookings() {
           {sortedBookingsForSelectedDate.length}
         </label>
         <label>
-          Done: <strong> {totalDone}</strong>
+          Done: <strong>{totalDone}</strong>
         </label>
         <label>
-          Current: <strong> {totalCurrent}</strong>
+          Current: <strong>{totalCurrent}</strong>
         </label>
         <label>
           Upcoming: <strong>{totalUpcoming}</strong>
@@ -441,7 +313,6 @@ function Bookings() {
                     }
                   )}
                 </p>
-
                 <p>
                   <strong>Status:</strong>{" "}
                   {status.charAt(0).toUpperCase() + status.slice(1)}

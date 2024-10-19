@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import "./sideBar.css"; // CSS for styles
 import Bookings from "../bookings/bookings";
-import Manage from "../manage/manage";
+import Manage from "../manageBreaks/manageBreaks";
 import { CiMenuFries } from "react-icons/ci";
 import { AiOutlineLogout, AiOutlineCalendar } from "react-icons/ai";
 import { MdOutlineFreeBreakfast } from "react-icons/md";
-import BarberSchedule from "../times/times";
+import BarberSchedule from "../barber_schedule/barberSchedule";
 import BarberExceptions from "../exeptions/exceptions";
 import { TbClockHour5 } from "react-icons/tb";
 import { IoCloseOutline } from "react-icons/io5";

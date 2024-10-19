@@ -1,25 +1,19 @@
 import React, { useState } from "react";
 import "./services.css";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectedExtraServices,
-  selectedServiceId,
-  updateSelectedService,
-} from "../../../redux/slices.js";
-import Modal from "../../../ModelView.js"; // Import the modal component
+import Modal from "../../../ModelView/ModelView.js"; // Import the modal component
 import { FaPlusCircle } from "react-icons/fa";
+import { selectService, handleExtraChange } from "./serviceUtils";
 
 const ServicesList = ({ items }) => {
   const dispatch = useDispatch();
-  const [openServiceId, setOpenServiceId] = useState(null); // Track which service's extra details are open
-  const [isModalOpen, setIsModalOpen] = useState(false); // Track modal visibility
+  const [openServiceId, setOpenServiceId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const additionalServices = useSelector(
     (state) => state.services.additionalServices
   );
   const selectedExtras = useSelector((state) => state.services.selectedExtras);
-
-  // Retrieve values from Redux
   const selectedCategory = useSelector(
     (state) => state.services.selectedCategory
   );
@@ -27,34 +21,14 @@ const ServicesList = ({ items }) => {
     (state) => state.services.selectedService
   );
 
-  const selectService = (serviceName, serviceId) => {
-    // Reset extra services when a different main service is selected
-    if (selectedService !== serviceName) {
-      dispatch(selectedExtraServices([])); // Clear selected extras in Redux
-    }
-
-    dispatch(updateSelectedService(serviceName));
-    dispatch(selectedServiceId(serviceId));
-  };
-
   const toggleExtra = (serviceId) => {
     if (openServiceId === serviceId) {
-      setOpenServiceId(null); // Close if already open
-      setIsModalOpen(false); // Close the modal
+      setOpenServiceId(null);
+      setIsModalOpen(false);
     } else {
       setOpenServiceId(serviceId);
-      setIsModalOpen(true); // Open the modal
+      setIsModalOpen(true);
     }
-  };
-
-  const handleExtraChange = (item) => {
-    const updatedExtras = selectedExtras.some(
-      (extra) => extra.name === item.name
-    )
-      ? selectedExtras.filter((extra) => extra.name !== item.name) // If already selected, remove it
-      : [...selectedExtras, item]; // Otherwise, add it
-
-    dispatch(selectedExtraServices(updatedExtras)); // Dispatch the updated extras to Redux
   };
 
   return (
@@ -78,6 +52,8 @@ const ServicesList = ({ items }) => {
                               }
                               onClick={() =>
                                 selectService(
+                                  dispatch,
+                                  selectedService,
                                   service.service_name,
                                   service.service_id
                                 )
@@ -96,6 +72,8 @@ const ServicesList = ({ items }) => {
                                   }
                                   onChange={() =>
                                     selectService(
+                                      dispatch,
+                                      selectedService,
                                       service.service_name,
                                       service.service_id
                                     )
@@ -141,7 +119,9 @@ const ServicesList = ({ items }) => {
             <input
               type="checkbox"
               checked={selectedExtras.some((extra) => extra.name === item.name)} // Check if the service is selected
-              onChange={() => handleExtraChange(item)} // Handle selection change
+              onChange={
+                () => handleExtraChange(item, selectedExtras, dispatch) // Handle selection change
+              }
             />
             {item.price} €
           </div>

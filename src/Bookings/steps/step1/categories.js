@@ -1,67 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./categories.css";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectedAdditionalServices,
-  setSelectedCategory,
-} from "../../../redux/slices";
-import { GiBeard, GiScissors } from "react-icons/gi"; // Import additional icons
-import { TbColorSwatch } from "react-icons/tb";
-
-const categoryIcons = {
-  Leikkaukset: <GiScissors size={80} />, // Icon for Haircuts
-  Parta: <GiBeard size={80} />, // Icon for Beard
-  Värjäykset: <TbColorSwatch size={80} />, // Icon for Color
-  // Add more categories and their corresponding icons as needed
-};
+import { handleAdditionalServices, toggleCategory } from "./categoryUtils";
+import { categoryIcons } from "./categoryData";
 
 const CategoriesList = ({ items }) => {
   const dispatch = useDispatch();
   const selectedCategory = useSelector(
     (state) => state.services.selectedCategory
   );
-
   const [expandedCategory, setExpandedCategory] = useState(selectedCategory);
 
-  const toggleCategory = (categoryName) => {
-    if (expandedCategory !== categoryName) {
-      setExpandedCategory(categoryName);
-      dispatch(setSelectedCategory(categoryName));
+  // Handle additional services ("Lisäpalvelut")
+  useEffect(() => {
+    if (items && items["Lisäpalvelut"]) {
+      handleAdditionalServices(items, dispatch);
     }
-  };
+  }, [items, dispatch]);
 
   return (
     <div className="categories-main-container">
       {items ? (
         <div className="categories-services">
           {Object.keys(items).map((categoryName, index) => {
-            // Exclude the "Lisäpalvelut" category
+            // Exclude the "Lisäpalvelut" category from rendering
             if (categoryName === "Lisäpalvelut") {
-              // Access the services from the items object
-              const services = items[categoryName]; // Get the services array for "Lisäpalvelut"
-              const serviceDetails = services.map((service) => ({
-                name: service.service_name,
-                estimatedTime: service.estimated_time,
-                price: service.price,
-                service_id: service.service_id,
-              })); // Create an array of objects with service name and estimated time
-
-              dispatch(selectedAdditionalServices(serviceDetails));
-
-              return null; // Skip rendering for this category
+              return null;
             }
+
             return (
               <div
                 key={index}
                 className="category-item"
-                onClick={() => toggleCategory(categoryName)}
+                onClick={() =>
+                  toggleCategory(
+                    categoryName,
+                    expandedCategory,
+                    setExpandedCategory,
+                    dispatch
+                  )
+                }
               >
                 <label className="category-main-name">
                   {categoryName}
                   <input
                     type="checkbox"
                     checked={expandedCategory === categoryName}
-                    onChange={() => toggleCategory(categoryName)}
+                    onChange={() =>
+                      toggleCategory(
+                        categoryName,
+                        expandedCategory,
+                        setExpandedCategory,
+                        dispatch
+                      )
+                    }
                   />
                 </label>
                 <label>{categoryIcons[categoryName] || null}</label>

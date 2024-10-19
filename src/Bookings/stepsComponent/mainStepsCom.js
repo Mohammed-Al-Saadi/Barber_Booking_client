@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import "./mainStepsCom.css"; // Optional CSS file for styling
+import "./mainStepsCom.css";
 import { useSelector } from "react-redux";
 import Barber from "../steps/step3/barbersAndTimes.js";
 import CategoriesList from "../steps/step1/categories.js";
 import PartThree from "../steps/step4/confirmBooking.js";
 import ServicesList from "../steps/step2/services.js";
 import { GrNext, GrPrevious } from "react-icons/gr";
-import CategoriesAndServices from "../../api/GetServices.js";
 
 const Booking = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -77,14 +76,13 @@ const Booking = () => {
 
   // Determine if "Next" button should be disabled
   const isNextDisabled =
-    (currentStep === 0 && !selectedCategory) || // Disable if on step 0 and no category selected
-    (currentStep === 1 && !selectedService) || // Disable if on step 1 and no service selected
+    (currentStep === 0 && !selectedCategory) ||
+    (currentStep === 1 && !selectedService) ||
     (currentStep === 2 && !selectedDataTime) ||
     (currentStep === 2 && !selectedBarber);
 
   return (
     <section id="service" className="booking-container">
-      <CategoriesAndServices />;
       <nav className="booking-nav">
         {steps.map((step, index) => (
           <div

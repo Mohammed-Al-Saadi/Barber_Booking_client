@@ -1,17 +1,10 @@
 import React, { useState } from "react";
-import "./confirmBooking.css"; // Make sure to create this CSS file for styling
+import "./confirmBooking.css";
 import { useSelector } from "react-redux";
-import { CiTimer } from "react-icons/ci";
-import { IoPersonCircleOutline } from "react-icons/io5";
-import { LuScissors } from "react-icons/lu";
-import { TbCategory } from "react-icons/tb";
-import { CiCalendarDate } from "react-icons/ci";
-import { FaCheckCircle } from "react-icons/fa"; // Import spinner icon
 import BounceLoader from "react-spinners/BounceLoader";
-import { PiCurrencyEurBold } from "react-icons/pi";
-import { MdOutlineHome } from "react-icons/md";
-import { GrLocation } from "react-icons/gr";
-import { BsCartPlusFill } from "react-icons/bs";
+import { FaCheckCircle } from "react-icons/fa";
+import { prepareBookingData, handleFormSubmit } from "./confirmBookingUtils";
+import { icons, bookingTexts } from "./confirmBookingData";
 
 const PartThree = () => {
   const [name, setName] = useState("");
@@ -21,7 +14,6 @@ const PartThree = () => {
   const [responseMessage, setResponseMessage] = useState("");
 
   const selectedExtras = useSelector((state) => state.services.selectedExtras);
-
   const selectedBarberId = useSelector(
     (state) => state.services.selectedBarber
   );
@@ -34,120 +26,66 @@ const PartThree = () => {
   const selectedService = useSelector(
     (state) => state.services.selectedServiceid
   );
-  // Extract service IDs from selectedExtras
-  const selectedExtraIds = selectedExtras.map((extra) => extra.service_id); // Adjust based on your actual object structure
-
   const selectedServiceName = useSelector(
     (state) => state.services.selectedService
   );
   const selectBarber = useSelector((state) => state.services.selectBarberName);
   const selectBaraerPrice = useSelector(
     (state) => state.services.selectbarberPrice
-  ); // Corrected selector
-  // Handle input changes
-  const handleNameChange = (e) => setName(e.target.value);
-  const handleEmailChange = (e) => setEmail(e.target.value);
-  const handlePhoneChange = (e) => setPhone(e.target.value);
+  );
+
+  // Prepare additional services
+  const selectedExtraIds = selectedExtras.map((extra) => extra.service_id);
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
 
-    // Create the booking data object
-    const bookingData = {
-      barber_id: selectedBarberId,
-      service_id: selectedService,
-      customer_name: name,
-      appointment_time: selectedDateTime,
-      email: email,
-      phone: phone,
-      price: selectBaraerPrice,
-      extra: selectedExtraIds,
-    };
+    const bookingData = prepareBookingData(
+      name,
+      email,
+      phone,
+      selectedBarberId,
+      selectedService,
+      selectedDateTime,
+      selectBaraerPrice,
+      selectedExtraIds
+    );
 
-    try {
-      // Simulate loading for 3 seconds
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      // Send the data to the backend
-      const response = await fetch("http://127.0.0.1:8080/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bookingData),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        setResponseMessage("success"); // Set success message
-        // Reset input fields after successful booking
-        setName("");
-        setEmail("");
-        setPhone("");
-      } else {
-        setResponseMessage(`Error: ${result.message}`);
-      }
-    } catch (error) {
-      setResponseMessage("An error occurred while creating the booking.");
-    } finally {
-      setLoading(false);
-    }
+    handleFormSubmit(bookingData, setLoading, setResponseMessage);
   };
 
   return (
     <div className="part-three-container">
       <div className="width1">
         <h3>Booking Information</h3>
-
         <div className="redux-values">
           <p>
-            <strong>
-              <IoPersonCircleOutline size={22} />
-            </strong>
+            <strong>{icons.person}</strong>
             {selectBarber || "None selected"}
           </p>
           <p>
-            <strong>
-              <CiCalendarDate size={22} />
-            </strong>
+            <strong>{icons.calendar}</strong>
             {selectedDateTime
-              ? `${new Date(selectedDateTime)
-                  .toLocaleDateString("fi-FI", { weekday: "short" })
-                  .charAt(0)
-                  .toUpperCase()}${new Date(selectedDateTime)
-                  .toLocaleDateString("fi-FI", { weekday: "short" })
-                  .slice(1)} ${new Date(selectedDateTime).toLocaleDateString(
-                  "fi-FI",
-                  { day: "numeric", month: "numeric", year: "numeric" }
-                )}`
+              ? `${new Date(selectedDateTime).toLocaleDateString("fi-FI", { weekday: "short" })} 
+                 ${new Date(selectedDateTime).toLocaleDateString("fi-FI", { day: "numeric", month: "numeric", year: "numeric" })}`
               : "None selected"}
-            <strong>
-              <CiTimer size={22} />
-            </strong>
+            <strong>{icons.timer}</strong>
             {selectedDateTime
               ? selectedDateTime.split(" ")[1]
-              : "None selected"}{" "}
+              : "None selected"}
           </p>
           <p>
-            <strong>
-              <TbCategory size={22} />
-            </strong>{" "}
+            <strong>{icons.category}</strong>
             {selectedCategory || "None selected"}
           </p>
           <p>
-            <strong>
-              <LuScissors size={22} />
-            </strong>{" "}
+            <strong>{icons.scissors}</strong>
             {selectedServiceName || "None selected"}
           </p>
           {selectedExtras.length > 0 && (
             <p>
-              <strong>
-                <BsCartPlusFill size={22} />
-              </strong>
+              <strong>{icons.cart}</strong>
               {Object.entries(selectedExtras).map(([key, item]) => (
                 <div key={key}>
                   {item.name}- {item.price}€
@@ -156,26 +94,18 @@ const PartThree = () => {
             </p>
           )}
           <p>
-            <strong>
-              {" "}
-              <PiCurrencyEurBold size={21} />
-            </strong>
+            <strong>{icons.currency}</strong>
             {selectBaraerPrice || "None selected"}
           </p>
           <p>
-            <strong>
-              <MdOutlineHome size={21} />
-            </strong>
-            The Best One barbershop
+            <strong>{icons.home}</strong>The Best One barbershop
           </p>
           <p>
-            <strong>
-              <GrLocation size={21} />
-            </strong>
-            Rongankatu 4 C 56, Tampere
+            <strong>{icons.location}</strong>Rongankatu 4 C 56, Tampere
           </p>
         </div>
       </div>
+
       <div className="width">
         {loading ? (
           <div className="loading-indicator">
@@ -204,8 +134,8 @@ const PartThree = () => {
                   type="text"
                   id="name"
                   value={name}
-                  onChange={handleNameChange}
-                  placeholder="Enter your name..."
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder={bookingTexts.namePlaceholder}
                   required
                 />
               </div>
@@ -215,8 +145,8 @@ const PartThree = () => {
                   type="email"
                   id="email"
                   value={email}
-                  onChange={handleEmailChange}
-                  placeholder="Enter your email..."
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={bookingTexts.emailPlaceholder}
                   required
                 />
               </div>
@@ -226,13 +156,13 @@ const PartThree = () => {
                   type="tel"
                   id="phone"
                   value={phone}
-                  onChange={handlePhoneChange}
-                  placeholder="Enter your phone number"
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder={bookingTexts.phonePlaceholder}
                   required
                 />
               </div>
               <button type="submit" disabled={loading}>
-                {loading ? "Sending..." : "Submit Booking"}
+                {loading ? "Sending..." : bookingTexts.submitButton}
               </button>
             </form>
           </>

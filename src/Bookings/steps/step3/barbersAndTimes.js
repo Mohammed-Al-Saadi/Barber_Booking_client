@@ -3,28 +3,24 @@ import "./barbersAndTimes.css";
 import { useDispatch, useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FaCalendarAlt } from "react-icons/fa"; // Calendar icon
-import { GrNext, GrPrevious } from "react-icons/gr"; // Next/Prev buttons
+import { FaCalendarAlt } from "react-icons/fa";
+import { GrNext, GrPrevious } from "react-icons/gr";
 import {
   selectBarber,
   selectDateTime,
   selectedBarberPrice,
   selectName,
 } from "../../../redux/slices";
-
 import BounceLoader from "react-spinners/BounceLoader";
 import { PiClockCountdownDuotone } from "react-icons/pi";
-
-import img from "../../../assets/1.jpg";
-
-// Define barber images based on barber_id
-const barberImages = {
-  1: img,
-  2: img,
-  3: img,
-  4: img,
-  5: img,
-};
+import { barberImages } from "./barberData";
+import {
+  fetchBarbersAndSlots,
+  handleBarberSelection,
+  handleSlotSelection,
+  formatDate,
+  getCurrentDayDate,
+} from "./barberUtils";
 
 const Barber = () => {
   const dispatch = useDispatch();
@@ -45,9 +41,7 @@ const Barber = () => {
   const [selectedBarber, setSelectedBarber] = useState(selectedBarberId);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availableSlots, setAvailableSlots] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState(
-    selectedDateTime ? selectedDateTime : null
-  );
+  const [selectedSlot, setSelectedSlot] = useState(selectedDateTime || null);
   const [dayOffset, setDayOffset] = useState(0);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
@@ -64,36 +58,15 @@ const Barber = () => {
   const datepickerRef = useRef(null);
   const calendarContainerRef = useRef(null);
 
+  // Fetch barber and slot data when services change
   useEffect(() => {
     if (combinedServices) {
-      setLoading(true);
-      setError(null);
-
-      fetch("http://127.0.0.1:8080/get_barbers_and_slots", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          service_name: combinedServices,
-        }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch barber data");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Barber data:", data); // Debug line
-          setBarberData(data.barbers);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error(err);
-          setError(err.message);
-          setLoading(false);
-        });
+      fetchBarbersAndSlots(
+        combinedServices,
+        setBarberData,
+        setLoading,
+        setError
+      );
     }
   }, [combinedServices]);
 
@@ -108,23 +81,9 @@ const Barber = () => {
     if (selectedDate && barberData && selectedBarber) {
       const dateString = selectedDate.toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
       const slots = barberData.time_slots[selectedBarber]?.[dateString] || [];
-
       setAvailableSlots(slots);
     }
   }, [selectedDate, barberData, selectedBarber]);
-
-  const handleBarberSelection = (barberId, barberName, barberPrice) => {
-    setSelectedBarber(barberId);
-    dispatch(selectBarber(barberId));
-    dispatch(selectName(barberName));
-    dispatch(selectedBarberPrice(barberPrice));
-  };
-
-  const handleSlotSelection = (date, time) => {
-    const slotIdentifier = `${date} ${time}`;
-    dispatch(selectDateTime(slotIdentifier));
-    setSelectedSlot(slotIdentifier);
-  };
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -132,27 +91,10 @@ const Barber = () => {
     setIsCalendarOpen(false);
   };
 
-  // Format the date to show "Thursday, 21/09/2024"
-  const formatDate = (date) => {
-    return date.toLocaleDateString("fi-FI", {
-      weekday: "short",
-      day: "numeric",
-      month: "numeric",
-      year: "2-digit",
-      timeZone: "Europe/Helsinki",
-    });
-  };
-
-  const getCurrentDayDate = (offset = 0) => {
-    const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + offset); // Adjust for the offset
-    return currentDate;
-  };
-
   const moveDay = (offset) => {
     const newDate = getCurrentDayDate(offset);
-    setSelectedDate(newDate); // Set the new selected date
-    setDayOffset(offset); // Update the offset
+    setSelectedDate(newDate); 
+    setDayOffset(offset); 
   };
 
   // Detect clicks outside the calendar to close it
@@ -200,7 +142,11 @@ const Barber = () => {
                   handleBarberSelection(
                     barber.barber_id,
                     barber.name,
-                    barber.price
+                    barber.price,
+                    dispatch,
+                    selectBarber,
+                    selectName,
+                    selectedBarberPrice
                   )
                 }
                 className={`barber-item ${
@@ -280,7 +226,10 @@ const Barber = () => {
                             onClick={() =>
                               handleSlotSelection(
                                 selectedDate.toLocaleDateString("en-CA"),
-                                slot.Time
+                                slot.Time,
+                                dispatch,
+                                selectDateTime,
+                                setSelectedSlot
                               )
                             }
                             style={{ cursor: "pointer" }}

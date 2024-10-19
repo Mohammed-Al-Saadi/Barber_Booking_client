@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { selectedBarberDashName, selectedBarberDashId } from "../redux/slices";
+import {
+  selectedBarberDashName,
+  selectedBarberDashId,
+} from "../../redux/slices";
 
 const ProtectedRoute = ({ element }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const token = useSelector((state) => state.services.authBarnerId); // Access the token from Redux
+  const token = useSelector((state) => state.services.authBarnerId);
   useEffect(() => {
     const checkSession = async () => {
       console.log("Checking session with token:", token);
