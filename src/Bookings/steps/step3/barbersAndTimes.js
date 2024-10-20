@@ -44,14 +44,12 @@ const Barber = () => {
   const [selectedSlot, setSelectedSlot] = useState(selectedDateTime || null);
   const [dayOffset, setDayOffset] = useState(0);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
-  // Retrieve values from Redux
   const selectedExtras = useSelector((state) => state.services.selectedExtras);
 
   // Memoize the combined services array to avoid re-creating it on every render
   const combinedServices = useMemo(() => {
     const extraNames = selectedExtras.map((extra) => extra.name);
-    return [selectedService, ...extraNames]; // This combines the main service and extra services
+    return [selectedService, ...extraNames]; 
   }, [selectedService, selectedExtras]);
 
   // Reference to DatePicker and outside click detection

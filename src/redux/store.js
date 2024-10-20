@@ -1,7 +1,7 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import servicesReducer from "../redux/slices"; // Adjust the path if needed
+import servicesReducer from "../redux/slices"; 
 
 const persistConfig = {
   key: "root",
@@ -17,7 +17,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ["persist/PERSIST"], // Ignore persist actions
+        ignoredActions: ["persist/PERSIST"], 
       },
     }),
 });

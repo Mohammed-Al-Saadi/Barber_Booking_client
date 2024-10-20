@@ -1,4 +1,4 @@
-import img from "../../../assets/1.jpg"; // Adjust the path as necessary
+import img from "../../../assets/1.jpg"; 
 
 // Define barber images based on barber_id
 export const barberImages = {
@@ -9,4 +9,3 @@ export const barberImages = {
   5: img,
 };
 
-// Add more static data here if necessary

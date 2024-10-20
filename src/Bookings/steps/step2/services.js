@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./services.css";
 import { useDispatch, useSelector } from "react-redux";
-import Modal from "../../../ModelView/ModelView.js"; // Import the modal component
+import Modal from "../../../ModelView/ModelView.js"; 
 import { FaPlusCircle } from "react-icons/fa";
 import { selectService, handleExtraChange } from "./serviceUtils";
 
@@ -118,9 +118,9 @@ const ServicesList = ({ items }) => {
             {item.name} - {item.estimatedTime} Min
             <input
               type="checkbox"
-              checked={selectedExtras.some((extra) => extra.name === item.name)} // Check if the service is selected
+              checked={selectedExtras.some((extra) => extra.name === item.name)} 
               onChange={
-                () => handleExtraChange(item, selectedExtras, dispatch) // Handle selection change
+                () => handleExtraChange(item, selectedExtras, dispatch) 
               }
             />
             {item.price} €

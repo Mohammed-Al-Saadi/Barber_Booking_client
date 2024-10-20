@@ -4,7 +4,7 @@ import { selectedAdditionalServices, setSelectedCategory } from "../../../redux/
 
 // Handle additional services for the "Lisäpalvelut" category
 export const handleAdditionalServices = (items, dispatch) => {
-  const services = items["Lisäpalvelut"]; // Get the services array for "Lisäpalvelut"
+  const services = items["Lisäpalvelut"]; 
   if (services) {
     const serviceDetails = services.map((service) => ({
       name: service.service_name,
@@ -21,7 +21,7 @@ export const handleAdditionalServices = (items, dispatch) => {
 // Handle category toggle
 export const toggleCategory = (categoryName, expandedCategory, setExpandedCategory, dispatch) => {
   if (expandedCategory !== categoryName) {
-    setExpandedCategory(categoryName); // Update local state for the selected category
-    dispatch(setSelectedCategory(categoryName)); // Dispatch action to set selected category in Redux
+    setExpandedCategory(categoryName); 
+    dispatch(setSelectedCategory(categoryName)); 
   }
 };

@@ -1,4 +1,4 @@
-import { postData } from "../../../api/apiService"; // Adjust the path if necessary
+import { postData } from "../../../api/apiService"; 
 
 // Prepare the booking data for submission
 export const prepareBookingData = (

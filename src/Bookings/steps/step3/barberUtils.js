@@ -1,4 +1,4 @@
-import { postData } from "../../../api/apiService"; // Adjust the path to your service
+import { postData } from "../../../api/apiService";
 
 // Fetch barbers and available slots for selected services
 export const fetchBarbersAndSlots = async (
@@ -12,7 +12,7 @@ export const fetchBarbersAndSlots = async (
     setError(null);
 
     const data = await postData("/get_barbers_and_slots", {
-      service_name: combinedServices, // Send combined services
+      service_name: combinedServices, 
     });
 
     setBarberData(data.barbers);

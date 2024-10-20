@@ -1,5 +1,5 @@
 import React from "react";
-import "./ModelView.css"; // Ensure this CSS file exists
+import "./ModelView.css"; 
 
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null; // Don't render if modal is not open

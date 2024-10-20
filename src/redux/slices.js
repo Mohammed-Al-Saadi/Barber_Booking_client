@@ -31,7 +31,7 @@ const servicesSlice = createSlice({
       state.selectedService = action.payload;
     },
     selectDateTime: (state, action) => {
-      state.selectedDateTime = action.payload; // Store date and time together
+      state.selectedDateTime = action.payload; 
     },
     selectBarber: (state, action) => {
       state.selectedBarber = action.payload;
@@ -59,10 +59,10 @@ const servicesSlice = createSlice({
     },
     // New reducers for authentication
     login: (state, action) => {
-      state.authBarnerId = action.payload; // Set the token
+      state.authBarnerId = action.payload; 
     },
     logout: (state) => {
-      state.authBarnerId = null; // Clear the token
+      state.authBarnerId = null; 
     },
   },
 });
@@ -86,5 +86,4 @@ export const {
   selectedBarberDashId,
 } = servicesSlice.actions;
 
-// Export the reducer
 export default servicesSlice.reducer;
